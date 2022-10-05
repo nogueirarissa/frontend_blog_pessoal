@@ -14,3 +14,7 @@
 .text-decorator-none {
     text-decoration: none;
 }
+
+.center {
+    justify-content: center;
+}

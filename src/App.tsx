@@ -4,7 +4,7 @@ import Navbar from './components/statics/navbar/Navbar';
 import Footer from './components/statics/footer/Footer';
 import Home from './paginas/home/Home';
 import Login from './paginas/login/Login';
-import CadastroUsuario from './paginas/cadastro/CadastroUsuario';
+import CadastroUsuario from './paginas/cadastroUsuario/CadastroUsuario';
 import './App.css';
 
 
