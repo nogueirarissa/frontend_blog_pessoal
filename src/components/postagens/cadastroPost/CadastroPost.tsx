@@ -3,9 +3,10 @@ import { Container, Typography, TextField, Button, Select, InputLabel, MenuItem,
 import './CadastroPost.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Tema from '../../../models/Tema';
-import useLocalStorage from 'react-use-localstorage';
 import Postagem from '../../../models/Postagem';
 import { busca, buscaId, post, put } from '../../../services/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokenReducer';
 import User from '../../../models/User';
 
 //import { TokenState } from '../../../store/tokens/tokenReducer';
@@ -14,18 +15,17 @@ function CadastroPost() {
     let navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [temas, setTemas] = useState<Tema[]>([]);
-    const [token, setToken] = useLocalStorage('token');
-    /*const token = useSelector<TokenState, TokenState["tokens"]>(
+    const token = useSelector<TokenState, TokenState["tokens"]>(
         (state) => state.tokens
-    );*/
+    );
 
-    /*useEffect(() => {
+    useEffect(() => {
         if (token == "") {
             alert("Você precisa estar logado")
             navigate("/login")
 
         }
-    }, [token])*/
+    }, [token])
 
     const [tema, setTema] = useState<Tema>(
         {
@@ -41,19 +41,19 @@ function CadastroPost() {
         usuario: null // adiciona o usuário dono na postagem
     })
 
-    /*Buscar o ID dentro do REDUX
+    //Buscar o ID dentro do REDUX
     const userId = useSelector<TokenState, TokenState['id']>(
         (state) => state.id
-    )*/
+    )
 
-    /*State que vai controlar o usuário que será inserido na postagem
+    //State que vai controlar o usuário que será inserido na postagem
     const [usuario, setUsuario] = useState<User>({
         id: +userId,
         nome: '',
         usuario: '',
         senha: '',
         foto: ''
-    })*/
+    })
 
     useEffect(() => { //monitora o state tema, e caso eu selecione o tema x, ela assume o valor e atualiza pelo setPostagem
         setPostagem({
