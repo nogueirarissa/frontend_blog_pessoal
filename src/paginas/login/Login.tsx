@@ -2,14 +2,16 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Typography, Button } from '@material-ui/core';
 import { Box, Grid, TextField } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import useLocalStorage from 'react-use-localstorage';
 import { login } from '../../services/Service'; //consome api definida no services.ts
 import UserLogin from '../../models/UserLogin';
+import { useDispatch } from 'react-redux';
+import { addToken } from '../../store/tokens/action';
 import './Login.css';
 
 function Login() {
     let navigate = useNavigate(); // armazena o token no navegador.
-    const [token, setToken] = useLocalStorage('token');
+    const dispatch = useDispatch();
+    const [token, setToken] = useState('');
     const [form, setForm] = useState(false);
     const [userLogin, setUserLogin] = useState<UserLogin>(
         {
@@ -27,11 +29,13 @@ function Login() {
         });
     }
 
-    useEffect(() => {
-        if (token !== '') {
-            navigate('/home');
+    //metodo para pegar o token e o id do json e guardar no redux
+    useEffect(()=>{
+        if(token != ''){
+            dispatch(addToken(token));
+            navigate('/home')
         }
-    }, [token]);
+    }, [token])
 
 
     async function onSubmit(e: ChangeEvent<HTMLFormElement>) { //quando clica no botão de logar para autenticar os dados do usuário, ele enviará as informações por meio da função onSubmit. 

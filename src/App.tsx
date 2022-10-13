@@ -12,9 +12,12 @@ import CadastroTema from './components/temas/cadastroTema/CadastroTema';
 import DeletarPostagem from './components/postagens/deletarPostagem/DeletarPostagem';
 import DeletarTema from './components/temas/deletarTema/DeletarTema';
 import Home from './paginas/home/Home';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 function App(): JSX.Element {
   return (
+    <Provider store={store}>
     <BrowserRouter>
       <Navbar />
       <div style={{ minHeight: '100vh' }}> {/* descola o footer do navbar */}
@@ -37,6 +40,7 @@ function App(): JSX.Element {
       </div>
       <Footer />
     </ BrowserRouter >
+    </Provider>
   );
 }
 export default App;
