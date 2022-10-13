@@ -10,6 +10,7 @@ import './Login.css';
 function Login() {
     let navigate = useNavigate(); // armazena o token no navegador.
     const [token, setToken] = useLocalStorage('token');
+    const [form, setForm] = useState(false);
     const [userLogin, setUserLogin] = useState<UserLogin>(
         {
             id: 0,
