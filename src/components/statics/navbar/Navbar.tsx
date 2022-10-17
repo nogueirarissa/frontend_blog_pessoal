@@ -2,6 +2,7 @@ import { AppBar, Toolbar, Box, Typography, Grid } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { addToken } from '../../../store/tokens/action';
 import { TokenState } from '../../../store/tokens/tokenReducer';
 import './Navbar.css';
@@ -15,9 +16,18 @@ function Navbar() {
 
     const dispatch = useDispatch();
 
-    function goLogout() {
+    function goLogout() { 
         dispatch(addToken(''));
-        alert("Usuário deslogado com sucesso.")
+        toast.info('Usuário deslogado', { //utilizando o toastify para personalizar o alerta.
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            theme: "colored",
+            progress: undefined,
+        });
         navigate('/login')
     }
 
@@ -55,7 +65,7 @@ function Navbar() {
                                 </Typography>
                             </Box>
                         </Link>
-                        <Link to="/formularioTema" className="text-decorator-none">
+                        <Link to="/cadastroTema" className="text-decorator-none">
                             <Box mx={1} className="cursor">
                                 <Typography variant="h6" color="inherit">
                                     Cadastrar Temas

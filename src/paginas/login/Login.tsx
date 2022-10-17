@@ -5,22 +5,33 @@ import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../services/Service'; //consome api definida no services.ts
 import UserLogin from '../../models/UserLogin';
 import { useDispatch } from 'react-redux';
-import { addToken } from '../../store/tokens/action';
+import { addToken, addId } from '../../store/tokens/action';
 import './Login.css';
+import { toast } from 'react-toastify';
 
 function Login() {
     let navigate = useNavigate(); // armazena o token no navegador.
     const dispatch = useDispatch();
     const [token, setToken] = useState('');
     const [form, setForm] = useState(false);
-    const [userLogin, setUserLogin] = useState<UserLogin>(
-        {
-            id: 0,
-            usuario: '',
-            senha: '',
-            token: '',
-        }
-    );
+
+    const [userLogin, setUserLogin] = useState<UserLogin>({
+        id: 0,
+        nome: '',
+        usuario: '',
+        senha: '',
+        foto: '',
+        token: '',
+    });
+
+    const [respUserLogin, setRespUserLogin] = useState<UserLogin>({
+        id: 0,
+        nome: '',
+        usuario: '',
+        senha: '',
+        foto: '',
+        token: '',
+    });
 
     function updatedModel(e: ChangeEvent<HTMLInputElement>) {
         setUserLogin({
@@ -29,16 +40,45 @@ function Login() {
         });
     }
 
-    //metodo para pegar o token e o id do json e guardar no redux
-    useEffect(()=>{
-        if(token != ''){
-            dispatch(addToken(token));
-            navigate('/home')
+    useEffect(() => {
+        if (token !== '') {
+            dispatch(addToken(token))
+            navigate('/home');
         }
-    }, [token])
+    }, [token]);
+
+    async function conectar(event: ChangeEvent<HTMLFormElement>) {
+        event.preventDefault();
+        try {
+            await login('usuarios/logar', userLogin, setRespUserLogin);
+            toast.success('Usuario conectado com sucesso', {
+                theme: 'colored',
+                autoClose: 2000,
+                hideProgressBar: true
+            })
+        } catch (error) {
+            toast.error(`Falha ao conectar`, {
+                theme: 'colored',
+                autoClose: 2000,
+                hideProgressBar: true
+            })
+        }
+    }
 
 
-    async function onSubmit(e: ChangeEvent<HTMLFormElement>) { //quando clica no botão de logar para autenticar os dados do usuário, ele enviará as informações por meio da função onSubmit. 
+    //metodo para pegar o token e o id do json e guardar no redux
+    useEffect(() => {
+        if (respUserLogin.token !== '') { 
+            //console.log(respUserLogin)
+            dispatch(addToken(respUserLogin.token))
+            dispatch(addId(respUserLogin.id.toString()))
+            navigate('/home');
+        }
+    }, [respUserLogin.token])
+
+
+    //substituído pelo método conectar
+    /*async function onSubmit(e: ChangeEvent<HTMLFormElement>) { //quando clica no botão de logar para autenticar os dados do usuário, ele enviará as informações por meio da função onSubmit. 
         e.preventDefault(); // aqui impede que ao clicar no botão a tela seja atualizada (previne o comportamento padrão do botão)
         try {
             await login('/usuarios/logar', userLogin, setToken)
@@ -49,14 +89,13 @@ function Login() {
 
         }
         /*console.log('userLogin: ' + Object.values (userLogin)); //apenas para teste, não se deve deixar na aplicação */
-    }
 
     return (
         <>
             <Grid container direction="row" justifyContent='center' alignItems='center'>
                 <Grid alignItems='center' xs={6}>
                     <Box paddingX={20}>
-                        <form onSubmit={onSubmit}>
+                        <form onSubmit={conectar}>
                             <Typography variant='h4' gutterBottom color='textPrimary' component='h4' align='center' className='textos1'>Entrar</Typography> {/* variant define o tipo de tag */}
 
                             <TextField value={userLogin.usuario} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedModel(e)} id="usuario" label="usuário" variant="outlined" name='usuario' fullWidth margin='normal' />

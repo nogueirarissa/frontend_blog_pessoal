@@ -8,6 +8,7 @@ import { busca, buscaId, post, put } from '../../../services/Service';
 import { useSelector } from 'react-redux';
 import { TokenState } from '../../../store/tokens/tokenReducer';
 import User from '../../../models/User';
+import { toast } from 'react-toastify';
 
 //import { TokenState } from '../../../store/tokens/tokenReducer';
 
@@ -21,7 +22,16 @@ function CadastroPost() {
 
     useEffect(() => {
         if (token == "") {
-            alert("Você precisa estar logado")
+            toast.error('Você precisa estar logado', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+            });
             navigate("/login")
 
         }
@@ -99,33 +109,43 @@ function CadastroPost() {
         e.preventDefault()
 
         if (id !== undefined) {
-            try {
-                await put(`/postagens`, postagem, setPostagem, {
-                    headers: {
-                        Authorization: token,
-                    },
-                });
-                alert('Postagem atualizada com sucesso');
-            } catch (error) {
-                alert('Erro ao atualizar, verifique os campos');
-            }
+            put(`/postagens`, postagem, setPostagem, {
+                headers: {
+                    'Authorization': token
+                }
+            })
+            toast.success('Postagem atualizada com sucesso', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+            });
         } else {
-            try {
-                await post(`/postagens`, postagem, setPostagem, {
-                    headers: {
-                        Authorization: token,
-                    },
-                });
-                alert('Postagem cadastrada com sucesso');
-            } catch (error) {
-                alert('Erro ao cadastrar, verifique os campos');
-            }
+            post(`/postagens`, postagem, setPostagem, {
+                headers: {
+                    'Authorization': token
+                }
+            })
+            toast.success('Postagem cadastrada com sucesso', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+            });
         }
         navigate('/posts');
-    } 
+    }
     return ( //função onSubmit envia as informações para a api
-        <Container maxWidth="sm" className="topo"> 
-            <form onSubmit={onSubmit}> 
+        <Container maxWidth="sm" className="topo">
+            <form onSubmit={onSubmit}>
                 <Typography variant="h3" color="textSecondary" component="h1" align="center" >Formulário de cadastro postagem</Typography>
                 <TextField value={postagem.titulo} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedPostagem(e)} id="titulo" label="titulo" variant="outlined" name="titulo" margin="normal" fullWidth />
                 <TextField value={postagem.texto} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedPostagem(e)} id="texto" label="texto" name="texto" variant="outlined" margin="normal" fullWidth />
@@ -135,7 +155,7 @@ function CadastroPost() {
                     <Select
                         labelId="demo-simple-select-helper-label"
                         id="demo-simple-select-helper"
-                        onChange={(e) => buscaId(`/tema/${e.target.value}`, setTema, { 
+                        onChange={(e) => buscaId(`/tema/${e.target.value}`, setTema, {
                             headers: {
                                 'Authorization': token
                             }
